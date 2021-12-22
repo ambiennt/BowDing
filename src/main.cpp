@@ -6,15 +6,15 @@ DEFAULT_SETTINGS(settings);
 void dllenter() {}
 void dllexit() {}
 
-THook(void, "?_hurt@Player@@MEAA_NAEBVActorDamageSource@@H_N1@Z",
+THook(bool, "?_hurt@Player@@MEAA_NAEBVActorDamageSource@@H_N1@Z",
 	Player* player, ActorDamageSource *source, int damage, bool knock, bool ignite) {
-	original(player, source, damage, knock, ignite);
+	bool result = original(player, source, damage, knock, ignite);
 
-	if (!player || !source) return;
+	if (!player || !source) return result;
 	if ((source->getDamagingEntityType() == ActorType::Arrow) && (source->getEntityType() == ActorType::Player_0)) {
 
 		auto shooter = (Player*)LocateService<Level>()->fetchEntity(source->getEntityUniqueID(), false);
-		if (!shooter || (shooter == player)) return; // if player shoots themself
+		if (!shooter || (shooter == player)) return result; // if player shoots themself
 
 		float currHealth = getAttribute(player, 7)->currentVal;
 		float currAbsorption = getAttribute(player, 14)->currentVal;
@@ -33,4 +33,5 @@ THook(void, "?_hurt@Player@@MEAA_NAEBVActorDamageSource@@H_N1@Z",
 		shooter->sendNetworkPacket(textPkt);
 		shooter->sendNetworkPacket(soundPkt);
 	}
+	return result;
 }
