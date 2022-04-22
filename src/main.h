@@ -13,11 +13,11 @@
 
 inline struct Settings {
 
-    bool useResourcePackGlyphs = false;
+	bool useResourcePackGlyphs = false;
 
-    template <typename IO> static inline bool io(IO f, Settings &settings, YAML::Node &node) {
-        return f(settings.useResourcePackGlyphs, node["useResourcePackGlyphs"]);
-    }
+	template <typename IO> static inline bool io(IO f, Settings &settings, YAML::Node &node) {
+		return f(settings.useResourcePackGlyphs, node["useResourcePackGlyphs"]);
+	}
 } settings;
 
 DEF_LOGGER("BowDing");
